@@ -46,10 +46,23 @@ flying in and out in a terminal like as seen in "The Matrix" movie. It can
 scroll lines all at the same rate or asynchronously and at a user-defined
 speed.
 
-CMAtrix is inspired from 'The Matrix' movie. If you haven’t seen this movie and you are a fan of computers or sci-fi in general, go see this movie!!!
+CMAtrix is inspired from 'The Matrix' movie. If you haven't seen this movie and you are a fan of computers or sci-fi in general, go see this movie!!!
 
 > :grey_exclamation:`Disclaimer` : We are in no way affiliated in any way with the movie "The Matrix", "Warner Bros" nor
 any of its affiliates in any way, just fans.
+
+---
+
+## 🎨 About This Fork (ccolor)
+
+This is a fun modification of CMatrix created by **B.** that replaces the traditional characters with colorful emojis! 
+
+**All kudos and credit go to the original CMatrix authors** - this fork was created purely for fun and experimentation. The modifications were made to:
+- Replace ASCII characters with colorful emojis
+- Test and stress-test [Cursor.ai](https://cursor.ai) capabilities
+- Test Windows 11 terminal emoji rendering
+
+The original CMatrix project and its maintainers deserve all the credit for the excellent base implementation. This is just a playful experiment! 😊
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
@@ -66,10 +79,22 @@ If you get no output then you need to install ncurses. Click below to install nc
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
-## :floppy_disk: Building and installing cmatrix
-To install cmatrix, Clone this repo in your local system and use either of the following methods from within the cmatrix directory.
+## :floppy_disk: Building and installing ccolor
+To install ccolor, Clone this repo in your local system and use the build script from within the ccolor directory.
 
-#### :small_blue_diamond: Using `configure` (recommended for most linux/mingw users)
+#### :small_blue_diamond: Quick Build (Recommended)
+```sh
+# Install dependencies (if needed)
+sudo apt-get install build-essential libncursesw5-dev
+
+# Build
+./build.sh
+
+# Run
+./ccolor
+```
+
+#### :small_blue_diamond: Using `configure` (original method)
 ```sh
 autoreconf -i  # skip if using released tarball
 ./configure
@@ -96,23 +121,25 @@ make install
 
 ## :bookmark_tabs: Usage
 
-After you have installed **cmatrix** just type the command `cmatrix` to run it :)
+After you have built **ccolor**, just run it:
 ```sh
-cmatrix
+./ccolor
 ```
-Run with different arguments to get different effects.
+
+Run with different arguments to get different effects:
 ```sh
-cmatrix [-abBflohnsmVx] [-u update] [-C color]
+./ccolor [-abBflohnsmVx] [-u update] [-C color]
 ```
+
 Example:
 ```sh
-cmatrix -ba -u 2 -C red
+./ccolor -ba -u 2 -C red
+./ccolor -r  # Rainbow mode with colorful emojis!
 ```
 
-For more options and **help** run `cmatrix -h` <br>OR<br> Read Manual Page by running command `man cmatrix`
+For more options and **help** run `./ccolor -h`
 
-_To get the program to look most like the movie, use `cmatrix -lba`_
-_To get the program to look most like the Win/Mac screensaver, use `cmatrix -ol`_
+**Note**: This fork displays colorful emojis instead of ASCII characters by default. The original CMatrix behavior is preserved when using classic mode (`-c`), console mode (`-l`), or xwindow mode (`-x`).
 
 > :round_pushpin: _Note: cmatrix is probably not particularly portable or efficient, but it won't hog
 **too** much CPU time._

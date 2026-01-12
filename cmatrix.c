@@ -85,6 +85,7 @@ typedef struct cmatrix {
 int console = 0;
 int xwindow = 0;
 int lock = 0;
+int use_emojis = 0;  /* Flag to indicate if we're using emojis */
 cmatrix **matrix = (cmatrix **) NULL;
 int *length = NULL;  /* Length of cols in each line */
 int *spaces = NULL;  /* Spaces left to fill */
@@ -92,6 +93,86 @@ int *updates = NULL; /* What does this do again? */
 #ifndef _WIN32
 volatile sig_atomic_t signal_status = 0; /* Indicates a caught signal */
 #endif
+
+/* Array of colorful emojis to use instead of regular characters */
+static const wchar_t emoji_list[] = {
+    0x1F300, /* 🌰 cyclone */
+    0x1F301, /* 🌱 fog */
+    0x1F308, /* 🌈 rainbow */
+    0x1F30A, /* 🌊 wave */
+    0x1F31F, /* 🌟 glowing star */
+    0x1F320, /* ⭐ star */
+    0x1F4A5, /* 💥 explosion */
+    0x1F4A6, /* 💦 sweat droplets */
+    0x1F4A7, /* 💧 droplet */
+    0x1F4A8, /* 💨 dashing away */
+    0x1F4AB, /* 💫 dizzy */
+    0x1F4AE, /* 💮 white flower */
+    0x1F525, /* 🔥 fire */
+    0x1F52E, /* 🔮 crystal ball */
+    0x1F535, /* 🔵 blue circle */
+    0x1F536, /* 🔶 orange diamond */
+    0x1F537, /* 🔷 blue diamond */
+    0x1F538, /* 🔸 small orange diamond */
+    0x1F539, /* 🔹 small blue diamond */
+    0x1F53A, /* 🔺 red triangle */
+    0x1F53B, /* 🔻 red triangle down */
+    0x1F5A4, /* 🖤 black heart */
+    0x1F680, /* 🚀 rocket */
+    0x1F6A8, /* 🚨 police car light */
+    0x1F9E1, /* 🧡 orange heart */
+    0x1F9E2, /* 🧢 billed cap */
+    0x1F9E3, /* 🧣 scarf */
+    0x1F9E4, /* 🧤 gloves */
+    0x1F9E5, /* 🧥 coat */
+    0x1F9E6, /* 🧦 socks */
+    0x2728,  /* ✨ sparkles */
+    0x2B50,  /* ⭐ star */
+    0x26A1,  /* ⚡ lightning */
+    0x2600,  /* ☀️ sun */
+    0x2604,  /* ☄️ comet */
+    0x2614,  /* ☔ umbrella with rain */
+    0x2744,  /* ❄️ snowflake */
+    0x1F48E, /* 💎 gem */
+    0x1F3A8, /* 🎨 artist palette */
+    0x1F3AF, /* 🎯 target */
+    0x1F4A9, /* 💩 pile of poo */
+    0x1F4AA, /* 💪 flexed biceps */
+    0x1F4AD, /* 💭 thought balloon */
+    0x1F4AF, /* 💯 hundred points */
+    0x1F6A2, /* 🚢 ship */
+    0x1F6F8, /* 🛸 flying saucer */
+    0x1F9E8, /* 🧨 firecracker */
+    0x1F9E9, /* 🧩 puzzle piece */
+    0x1F9EA, /* 🧪 test tube */
+    0x1F9EB, /* 🧫 petri dish */
+    0x1F9EC, /* 🧬 DNA */
+    0x1F9ED, /* 🧭 compass */
+    0x1F9EE, /* 🧮 abacus */
+    0x1F9EF, /* 🧯 fire extinguisher */
+    0x1F9F0, /* 🧰 wrench */
+    0x1F9F1, /* 🧱 brick */
+    0x1F9F2, /* 🧲 magnet */
+    0x1F9F3, /* 🧳 luggage */
+    0x1F9F4, /* 🧴 lotion bottle */
+    0x1F9F5, /* 🧵 thread */
+    0x1F9F6, /* 🧶 yarn */
+    0x1F9F7, /* 🧷 safety pin */
+    0x1F9F8, /* 🧸 teddy bear */
+    0x1F9F9, /* 🧹 broom */
+    0x1F9FA, /* 🧺 basket */
+    0x1F9FB, /* 🧻 roll of paper */
+    0x1F9FC, /* 🧼 soap */
+    0x1F9FD, /* 🧽 sponge */
+    0x1F9FE, /* 🧾 receipt */
+    0x1F9FF, /* 🧿 nazar amulet */
+};
+#define EMOJI_COUNT (sizeof(emoji_list) / sizeof(emoji_list[0]))
+
+/* Get a random emoji character code */
+static int get_random_emoji(void) {
+    return (int)emoji_list[rand() % EMOJI_COUNT];
+}
 
 int va_system(char *str, ...) {
 
@@ -223,6 +304,7 @@ void var_init() {
     for (i = 0; i <= LINES; i++) {
         for (j = 0; j <= COLS - 1; j += 2) {
             matrix[i][j].val = -1;
+            matrix[i][j].is_head = false;
         }
     }
 
@@ -529,12 +611,16 @@ if (console) {
          * range */
         randmin = 0xff66;
         highnum = 0xff9d;
+        use_emojis = 0;
     } else if (console || xwindow) {
         randmin = 166;
         highnum = 217;
+        use_emojis = 0;
     } else {
-        randmin = 33;
-        highnum = 123;
+        /* Use colored emojis instead of regular characters */
+        randmin = 0;  /* Index into emoji_list array */
+        highnum = EMOJI_COUNT - 1;
+        use_emojis = 1;
     }
     randnum = highnum - randmin;
 
@@ -682,14 +768,22 @@ if (console) {
                             if (((int) rand() % 3) == 1) {
                                 matrix[0][j].val = 0;
                             } else {
-                                matrix[0][j].val = (int) rand() % randnum + randmin;
+                                if (use_emojis) {
+                                    matrix[0][j].val = get_random_emoji();
+                                } else {
+                                    matrix[0][j].val = (int) rand() % randnum + randmin;
+                                }
                             }
                             spaces[j] = (int) rand() % LINES + 1;
                         }
                     } else if (random > highnum && matrix[1][j].val != 1) {
                         matrix[0][j].val = ' ';
                     } else {
-                        matrix[0][j].val = (int) rand() % randnum + randmin;
+                        if (use_emojis) {
+                            matrix[0][j].val = get_random_emoji();
+                        } else {
+                            matrix[0][j].val = (int) rand() % randnum + randmin;
+                        }
                     }
 
                 } else { /* New style scrolling (default) */
@@ -699,7 +793,11 @@ if (console) {
                     } else if (matrix[0][j].val == -1
                         && matrix[1][j].val == ' ') {
                         length[j] = (int) rand() % (LINES - 3) + 3;
-                        matrix[0][j].val = (int) rand() % randnum + randmin;
+                        if (use_emojis) {
+                            matrix[0][j].val = get_random_emoji();
+                        } else {
+                            matrix[0][j].val = (int) rand() % randnum + randmin;
+                        }
 
                         spaces[j] = (int) rand() % LINES + 1;
                     }
@@ -725,8 +823,13 @@ if (console) {
                                matrix[i][j].val != -1)) {
                             matrix[i][j].is_head = false;
                             if (changes) {
-                                if (rand() % 8 == 0)
-                                    matrix[i][j].val = (int) rand() % randnum + randmin;
+                                if (rand() % 8 == 0) {
+                                    if (use_emojis) {
+                                        matrix[i][j].val = get_random_emoji();
+                                    } else {
+                                        matrix[i][j].val = (int) rand() % randnum + randmin;
+                                    }
+                                }
                             }
                             i++;
                             y++;
@@ -737,7 +840,11 @@ if (console) {
                             continue;
                         }
 
-                        matrix[i][j].val = (int) rand() % randnum + randmin;
+                        if (use_emojis) {
+                            matrix[i][j].val = get_random_emoji();
+                        } else {
+                            matrix[i][j].val = (int) rand() % randnum + randmin;
+                        }
                         matrix[i][j].is_head = true;
 
                         /* If we're at the top of the column and it's reached its
@@ -782,7 +889,14 @@ if (console) {
                     } else if (matrix[i][j].val == -1) {
                         addch(' ');
                     } else {
-                        addch(matrix[i][j].val);
+                        if (use_emojis) {
+                            wchar_t char_array[2];
+                            char_array[0] = matrix[i][j].val;
+                            char_array[1] = 0;
+                            addwstr(char_array);
+                        } else {
+                            addch(matrix[i][j].val);
+                        }
                     }
 
                     attroff(COLOR_PAIR(COLOR_WHITE));
@@ -793,31 +907,58 @@ if (console) {
                         attroff(A_ALTCHARSET);
                     }
                 } else {
+                    int display_color = mcolor;
                     if (rainbow) {
                         int randomColor = rand() % 6;
 
                         switch (randomColor) {
                             case 0:
-                                mcolor = COLOR_GREEN;
+                                display_color = COLOR_GREEN;
                                 break;
                             case 1:
-                                mcolor = COLOR_BLUE;
+                                display_color = COLOR_BLUE;
                                 break;
                             case 2:
-                                mcolor = COLOR_BLACK;
+                                display_color = COLOR_BLACK;
                                 break;
                             case 3:
-                                mcolor = COLOR_YELLOW;
+                                display_color = COLOR_YELLOW;
                                 break;
                             case 4:
-                                mcolor = COLOR_CYAN;
+                                display_color = COLOR_CYAN;
                                 break;
                             case 5:
-                                mcolor = COLOR_MAGENTA;
+                                display_color = COLOR_MAGENTA;
                                 break;
                        }
+                    } else if (use_emojis) {
+                        /* Make emojis colorful by using a color based on the emoji value */
+                        int color_index = (matrix[i][j].val % 7);
+                        switch (color_index) {
+                            case 0:
+                                display_color = COLOR_GREEN;
+                                break;
+                            case 1:
+                                display_color = COLOR_BLUE;
+                                break;
+                            case 2:
+                                display_color = COLOR_YELLOW;
+                                break;
+                            case 3:
+                                display_color = COLOR_CYAN;
+                                break;
+                            case 4:
+                                display_color = COLOR_MAGENTA;
+                                break;
+                            case 5:
+                                display_color = COLOR_RED;
+                                break;
+                            case 6:
+                                display_color = COLOR_WHITE;
+                                break;
+                        }
                     }
-                    attron(COLOR_PAIR(mcolor));
+                    attron(COLOR_PAIR(display_color));
                     if (matrix[i][j].val == 1) {
                         if (bold) {
                             attron(A_BOLD);
@@ -857,7 +998,7 @@ if (console) {
                             attroff(A_ALTCHARSET);
                         }
                     }
-                    attroff(COLOR_PAIR(mcolor));
+                    attroff(COLOR_PAIR(display_color));
                 }
             }
         }
