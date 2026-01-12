@@ -1,68 +1,36 @@
-<h1 align="center">CMatrix</h1>
+<h1 align="center">CColor</h1>
 
-<h3 align="center"> Matrix like effect in your terminal </h3>
+<h3 align="center"> Matrix like effect in your terminal with colorful emojis </h3>
 
 </p>
 <p align="center">
-  <a href="https://travis-ci.org/abishekvashok/cmatrix">
-    <img src="https://travis-ci.org/abishekvashok/cmatrix.svg?branch=master">
-  </a>
   <a href="./COPYING">
     <img src="https://img.shields.io/github/license/abishekvashok/cmatrix?color=blue">
   </a>
   <img src="https://img.shields.io/badge/contributions-welcome-orange">
-  <a href="https://github.com/abishekvashok/cmatrix/stargazers">
-    <img src="https://img.shields.io/github/stars/abishekvashok/cmatrix">
-  </a>
-  <a href="https://github.com/abishekvashok/cmatrix/network">
-    <img src="https://img.shields.io/github/forks/abishekvashok/cmatrix">
-  </a>
 </p>
-
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
 ## Contents
 - [Overview](#overview)
 - [Build Dependencies](#build-dependencies)
-- [Building and Installation](#building-and-installing-cmatrix)
-    - [Using configure (recommended)](#using-configure-(recommended-for-most-linux%2Fmingw-users))
-    - [Using CMake](#using-cmake)
+- [Building and Installation](#building-and-installing-ccolor)
 - [Usage](#usage)
-- [Captures](#captures)
-    - [Screenshots](#screenshots)
-    - [Screencasts](#screencasts)
-- [Maintainer](#maintainers)
-    - [Contributors](#our-contributors)
-- [Contribution Guide](#contribution-guide)
-- [License](#license)
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
 ## :cloud: Overview
 
-CMatrix is based on the screensaver from The Matrix website. It shows text
-flying in and out in a terminal like as seen in "The Matrix" movie. It can
-scroll lines all at the same rate or asynchronously and at a user-defined
-speed.
+CColor is a fun fork of CMatrix that replaces the traditional characters with colorful emojis! It shows text flying in and out in a terminal like as seen in "The Matrix" movie, but with a colorful emoji twist.
 
-CMAtrix is inspired from 'The Matrix' movie. If you haven't seen this movie and you are a fan of computers or sci-fi in general, go see this movie!!!
-
-> :grey_exclamation:`Disclaimer` : We are in no way affiliated in any way with the movie "The Matrix", "Warner Bros" nor
-any of its affiliates in any way, just fans.
-
----
-
-## 🎨 About This Fork (ccolor)
-
-This is a fun modification of CMatrix created by **B.** that replaces the traditional characters with colorful emojis! 
-
-**All kudos and credit go to the original CMatrix authors** - this fork was created purely for fun and experimentation. The modifications were made to:
+This fork was created by **B.** purely for fun and experimentation. The modifications were made to:
 - Replace ASCII characters with colorful emojis
 - Test and stress-test [Cursor.ai](https://cursor.ai) capabilities
 - Test Windows 11 terminal emoji rendering
 
-The original CMatrix project and its maintainers deserve all the credit for the excellent base implementation. This is just a playful experiment! 😊
+> :grey_exclamation:`Disclaimer` : We are in no way affiliated in any way with the movie "The Matrix", "Warner Bros" nor
+any of its affiliates in any way, just fans.
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
@@ -141,30 +109,12 @@ For more options and **help** run `./ccolor -h`
 
 **Note**: This fork displays colorful emojis instead of ASCII characters by default. The original CMatrix behavior is preserved when using classic mode (`-c`), console mode (`-l`), or xwindow mode (`-x`).
 
-> :round_pushpin: _Note: cmatrix is probably not particularly portable or efficient, but it won't hog
+> :round_pushpin: _Note: ccolor is probably not particularly portable or efficient, but it won't hog
 **too** much CPU time._
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
-## :camera: Captures
-
-#### :small_blue_diamond: Screenshots
-
-<!-- ![Special Font & bold](data/img/capture_bold_font.png?raw=true "cmatrix -bx") -->
-<p align="center">
-<img src="./data/img/capture_bold_font.png" alt="cmatrix screenshot">
-</p>
-
-#### :small_blue_diamond: Screencasts
-
-<!-- ![Movie-Like Cast](data/img/capture_orig.gif?raw=true "cmatrix -xba") -->
-<p align="center">
-<img src="./data/img/capture_orig.gif" alt="cmatrix screencast">
-</p>
-
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## :zap: Maintainers
+## :zap: Original Maintainers (The GOAT)
 - ➤ **Abishek V Ashok** [Core] - <abishekvashok@gmail.com><br> 
 <p align="center">
   <a href="https://twitter.com/abishekvashok">
@@ -175,38 +125,11 @@ For more options and **help** run `./ccolor -h`
   </a>
 </p>
 
+**All kudos and credit go to the original CMatrix authors!** This is just a playful experiment. 😊
 
-## :busts_in_silhouette: Our Contributors
-#### :small_orange_diamond: Thanks to
-- ➤ **Chris Allegretta** <chrisa@asty.org> for writing cmatrix up in a fortnight and giving us
-  the responsibility to further improve it.
-- ➤ **Krisjon Hanson** and **Bjoern Ganslandt** for helping with bold support and
-  Bjoern again for the cursor removal code, helping with the `-u` and `-l`
-  modes/flags, and Makefile improvements.
-- ➤ **Adam Gurno** for multi-color support.
-- ➤ **Garrick West** for debian consolefont dir support.
-- ➤ **Nemo** for design thoughts and continuous help and support.
-- ➤ **John Donahue** for helping with transparent term support
-- ➤ **Ben Esacove** for Redhat 6 compatibility w/matrix.psf.gz
-- ➤ **jwz** for the xmatrix module to xscreensaver at http://www.jwz.org/xscreensaver.
-- Chris Allegretta's girlfriend **Amy** for not killing him when he stayed up till 3 AM
-  writing code.
-- ➤ **Sumit Kumar Soni** for beautifying the README.
-- The makers of the Matrix for one kickass movie!
-- ➤ Everyone who has sent (and who will send) us and Chris mails regarding
-  bugs, comments, patches or just a simple hello.
-- ➤ Everyone who has contributed to the project by opening issues and PRs on the github repository.
-
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## :book: Contribution Guide
-If you have any suggestions/flames/patches to send, please feel free to:
-- Open issues and if possible label them, so that it is easy to categorise features, bugs etc.
-- If you solved some problems or made some valuable changes, Please open a Pull Request on Github.
-- See [contributing.md](./CONTRIBUTING.md) for more details.
+Check out the original amazing project: **[CMatrix on GitHub](https://github.com/abishekvashok/cmatrix)**
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
 ## :page_facing_up: License
 This software is provided under the GNU GPL v3. [View License](./COPYING)
-
